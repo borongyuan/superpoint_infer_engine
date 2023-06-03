@@ -72,7 +72,8 @@ def main():
     # Check onnx converion.
     onnx_model = onnx.load(onnx_filename)
     onnx.checker.check_model(onnx_model)
-    ort_session = onnxruntime.InferenceSession(onnx_filename)
+    ort_session = onnxruntime.InferenceSession(
+        onnx_filename,  providers=['TensorrtExecutionProvider', 'CUDAExecutionProvider', 'CPUExecutionProvider'])
 
     # compute ONNX Runtime output prediction
     ort_inputs = {ort_session.get_inputs()[0].name: to_numpy(x)}
