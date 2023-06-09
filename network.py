@@ -51,11 +51,8 @@ class SuperPointNet(nn.Module):
         # Descriptor Head.
         cDa = self.relu(self.convDa(x))
         desc = self.convDb(cDa)
-
-        # Normally, you would divide by l2norm (ReduceL2 in onnx) on device.
-        # However, movidius does not support this layer, so we'll have to calculate it on the host side.
-        # dn = torch.norm(desc, p=2, dim=1) # Compute the norm.
-        # desc = desc.div(torch.unsqueeze(dn, 1)) # Divide by norm to normalize.
+        dn = torch.norm(desc, p=2, dim=1) # Compute the norm.
+        desc = desc.div(torch.unsqueeze(dn, 1)) # Divide by norm to normalize.
 
         return semi, desc
 
