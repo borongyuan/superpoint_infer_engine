@@ -49,15 +49,11 @@ class SuperPointNet(nn.Module):
         semi = self.convPb(cPa)
         dense = torch.softmax(semi, 1)
         nodust = torch.permute(dense[:, :-1], (0, 2, 3, 1))
-        Hc = nodust.size(1)
-        Wc = nodust.size(2)
-        heatmap = torch.reshape(nodust, (-1, Hc, Wc, 8, 8))
-        heatmap = torch.permute(heatmap, (0, 1, 3, 2, 4))
-        heatmap = torch.reshape(heatmap, (-1, Hc * 8, Wc * 8))
+        B, Hc, Wc, _ = nodust.shape
+        heatmap = nodust.reshape(B, Hc, Wc, 8, 8).permute(0, 1, 3, 2, 4).reshape(B, Hc*8, Wc*8)
         # Descriptor Head.
         cDa = self.relu(self.convDa(x))
         desc = self.convDb(cDa)
-        dn = torch.norm(desc, p=2, dim=1) # Compute the norm.
-        desc = desc.div(torch.unsqueeze(dn, 1)) # Divide by norm to normalize.
+        desc = F.normalize(desc, p=2, dim=1)
 
         return heatmap, desc
