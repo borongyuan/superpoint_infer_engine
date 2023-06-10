@@ -66,7 +66,7 @@ def main():
                       opset_version=14,          # the ONNX version to export the model to
                       do_constant_folding=True,  # whether to execute constant folding for optimization
                       input_names = ['input'],   # the model's input names
-                      output_names = ['semi', 'desc'], # the model's output names
+                      output_names = ['heatmap', 'desc'], # the model's output names
                       )
 
     # Check onnx converion.
@@ -93,7 +93,7 @@ def main():
             "tensors":
             [
                 {       
-                    "output_tensor_name": "semi",
+                    "output_tensor_name": "heatmap",
                     "output_dimensions": torch_out[0].shape,
                     "output_entry_iteration_index": 0,
                     "output_properties_dimensions": [0],
