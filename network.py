@@ -54,6 +54,6 @@ class SuperPointNet(nn.Module):
         # Descriptor Head.
         cDa = self.relu(self.convDa(x))
         desc = self.convDb(cDa)
-        desc = F.normalize(desc, p=2, dim=1)
+        desc = F.normalize(desc, p=2, dim=1).permute(0, 2, 3, 1)
 
         return heatmap, desc
