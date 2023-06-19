@@ -53,7 +53,7 @@ class SuperPointNet(nn.Module):
         heatmap = nodust.reshape(B, Hc, Wc, 8, 8).permute(0, 1, 3, 2, 4).reshape(B, Hc*8, Wc*8)
         # Descriptor Head.
         cDa = self.relu(self.convDa(x))
-        desc = self.convDb(cDa)
-        desc = F.normalize(desc, p=2, dim=1).permute(0, 2, 3, 1)
+        desc = self.convDb(cDa).permute(0, 2, 3, 1)
+        # desc = F.normalize(desc, p=2, dim=1).permute(0, 2, 3, 1)
 
         return heatmap, desc
